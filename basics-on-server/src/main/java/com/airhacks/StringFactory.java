@@ -9,6 +9,8 @@ import javax.enterprise.inject.Produces;
 public class StringFactory {
 
     @Produces
-    private String aString = "highly configurable";
+    public String configurable() {
+        return " a string from a method" + System.currentTimeMillis();
+    }
 
 }
