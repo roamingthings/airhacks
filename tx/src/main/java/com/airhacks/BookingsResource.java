@@ -23,6 +23,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 /**
  *
@@ -44,6 +45,14 @@ public class BookingsResource {
 
     @Resource
     UserTransaction ut;
+
+    @GET
+    @Path("{id}")
+    public Booking find(@PathParam("id") long id) {
+        Booking b = this.em.find(Booking.class, id);
+        b.setName("new name");
+        return b;
+    }
 
     @GET
     public String get() throws InterruptedException, ExecutionException {
