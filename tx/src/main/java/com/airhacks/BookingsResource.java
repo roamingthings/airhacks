@@ -1,6 +1,6 @@
 package com.airhacks;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
  *
  * @author airhacks.com
  */
-@Stateless
+@RequestScoped
 @Path("bookings")
 public class BookingsResource {
 
