@@ -11,4 +11,6 @@ public @interface NoMagic {
 
     String value();
 
+    int priority() default 42;
+
 }
