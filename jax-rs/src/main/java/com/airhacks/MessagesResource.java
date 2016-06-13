@@ -34,11 +34,7 @@ public class MessagesResource {
 
     @GET
     @Path("{id}")
-    public JsonObject find(@PathParam("id") long id) {
-        return Json.createObjectBuilder().
-                add("name", "duke " + id).
-                add("id", id).
-                build();
+    public Message findMessage(@PathParam("id") long id) {
+        return new Message("negotiated", 12);
     }
-
 }
