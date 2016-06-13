@@ -9,7 +9,7 @@ import javax.inject.Inject;
  */
 public class CargoCult {
 
-    @Inject
+//    @Inject
     Wizard wizard;
 
     /**
@@ -17,6 +17,12 @@ public class CargoCult {
      */
     public CargoCult() {
         System.out.println("injected wizard = " + wizard);
+    }
+
+    @Inject
+    public CargoCult(Wizard wizard) {
+        System.out.println("in constructor injected wizard = " + wizard);
+        this.wizard = wizard;
     }
 
     @PostConstruct
