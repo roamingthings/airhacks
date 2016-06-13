@@ -1,5 +1,7 @@
 package com.airhacks;
 
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
@@ -7,12 +9,19 @@ import javax.ws.rs.Path;
  *
  * @author airhacks.com
  */
+@Stateless
 @Path("magic")
 public class MagicResource {
 
+    @Inject
+    CargoCult cult;
+
+    @Inject
+    CargoCult backup;
+
     @GET
     public String get() {
-        return "deep magic";
+        return cult.getSomeMagic() + " <-> " + backup.getSomeMagic();
     }
 
 }
