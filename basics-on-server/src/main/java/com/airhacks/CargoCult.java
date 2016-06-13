@@ -22,6 +22,7 @@ public class CargoCult {
     String anotherMessage;
 
     @Inject
+    @MyConfiguration("postgres.jdbc.uri")
     String jdbcURL;
 
     /**
