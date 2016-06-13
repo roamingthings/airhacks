@@ -16,8 +16,11 @@ public class MagicResource {
     @Inject
     CargoCult cult;
 
-    @Inject
     CargoCult backup;
+
+    public MagicResource() {
+        this.backup = new CargoCult();
+    }
 
     @GET
     public String get() {

@@ -2,11 +2,13 @@ package com.airhacks;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
 /**
  *
  * @author airhacks.com
  */
+@Interceptors(Audit.class)
 public class CargoCult {
 
 //    @Inject
