@@ -1,8 +1,10 @@
 package com.airhacks;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.transaction.TransactionSynchronizationRegistry;
 
 /**
  *
@@ -25,6 +27,9 @@ public class CargoCult {
     @Inject
     @MyConfiguration("postgres.jdbc.uri")
     String jdbcURL;
+
+    @Resource //contains state in a TX
+    TransactionSynchronizationRegistry tsr;
 
     /**
      * Don't use constructors in Java EE for initialization
