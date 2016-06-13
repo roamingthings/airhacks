@@ -14,6 +14,9 @@ public class CargoCult {
 //    @Inject
     Wizard wizard;
 
+    @Inject
+    String message;
+
     /**
      * Don't use constructors in Java EE for initialization
      */
@@ -33,7 +36,7 @@ public class CargoCult {
     }
 
     public String getSomeMagic() {
-        return "not today";
+        return message;
     }
 
 }
