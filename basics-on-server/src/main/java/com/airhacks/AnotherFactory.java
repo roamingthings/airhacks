@@ -9,5 +9,6 @@ import javax.enterprise.inject.Produces;
 public class AnotherFactory {
 
     @Produces
+    @Highly
     private String another = "who wins";
 }

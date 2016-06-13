@@ -15,6 +15,7 @@ public class CargoCult {
     Wizard wizard;
 
     @Inject
+    @Highly
     String message;
 
     /**
