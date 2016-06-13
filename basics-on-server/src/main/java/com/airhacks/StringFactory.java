@@ -11,6 +11,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class StringFactory {
 
     @Produces
+    @MyConfiguration
     public String configurable(InjectionPoint ip) {
         Annotated annotated = ip.getAnnotated();
         MyConfiguration annotation = annotated.getAnnotation(MyConfiguration.class);

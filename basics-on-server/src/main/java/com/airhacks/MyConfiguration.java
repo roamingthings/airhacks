@@ -4,14 +4,18 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
+import javax.inject.Qualifier;
 
 /**
  *
  * @author airhacks.com
  */
-@Target(ElementType.FIELD)
+@Qualifier
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MyConfiguration {
 
-    String value();
+    @Nonbinding
+    String value() default "";
 }
