@@ -1,6 +1,7 @@
 package com.airhacks;
 
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
  *
@@ -9,8 +10,10 @@ import javax.enterprise.inject.Produces;
 public class StringFactory {
 
     @Produces
-    public String configurable() {
-        return " a string from a method" + System.currentTimeMillis();
+    public String configurable(InjectionPoint ip) {
+        Class<?> clazz = ip.getMember().getDeclaringClass();
+        String fieldName = ip.getMember().getName();
+        return clazz.getName() + "->" + fieldName + " -->" + System.currentTimeMillis();
     }
 
 }

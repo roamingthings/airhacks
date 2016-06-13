@@ -21,6 +21,9 @@ public class CargoCult {
     @Inject
     String anotherMessage;
 
+    @Inject
+    String jdbcURL;
+
     /**
      * Don't use constructors in Java EE for initialization
      */
@@ -40,7 +43,7 @@ public class CargoCult {
     }
 
     public String getSomeMagic() {
-        return message + " --> " + anotherMessage;
+        return message + " --> " + anotherMessage + " -- > " + jdbcURL;
     }
 
 }
