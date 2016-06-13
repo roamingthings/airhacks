@@ -1,7 +1,6 @@
 package com.airhacks;
 
 import java.net.URI;
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +19,8 @@ public class MessagesResource {
 
     @GET
     public JsonObject message() {
-        return Json.createObjectBuilder().add("name", "duke").build();
+        //return Json.createObjectBuilder().add("name", "duke").build();
+        throw new IllegalStateException("too lazy");
     }
 
     @POST
