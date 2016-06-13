@@ -21,6 +21,7 @@ public class MagicResource {
 
     @GET
     public String get() {
+        System.out.println("--- Cargo cult is: " + cult.getClass().getName());
         return cult.getSomeMagic() + " <-> " + backup.getSomeMagic();
     }
 
