@@ -6,12 +6,12 @@ package com.airhacks;
  */
 public class CargoCult {
 
-    @NoMagic
+    @NoMagic("deep")
     String message;
 
     String anotherNotAnnotated;
 
-    @NoMagic
+    @NoMagic("light")
     public void doSomething() {
 
     }
