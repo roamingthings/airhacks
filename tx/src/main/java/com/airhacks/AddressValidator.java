@@ -15,7 +15,7 @@ public class AddressValidator {
     SessionContext sc;
 
     public void validateAddress() {
-        sc.setRollbackOnly();
+        //sc.setRollbackOnly();
     }
 
 }
