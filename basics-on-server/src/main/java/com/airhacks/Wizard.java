@@ -6,6 +6,7 @@ import javax.interceptor.Interceptors;
  *
  * @author airhacks.com
  */
+@Magic(Magic.Kind.WHITE)
 @Interceptors(Audit.class)
 public class Wizard implements Magician {
 

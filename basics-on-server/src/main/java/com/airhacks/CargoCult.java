@@ -34,7 +34,7 @@ public class CargoCult {
     }
 
     @Inject
-    public CargoCult(Magician wizard) {
+    public CargoCult(@Magic(Magic.Kind.WHITE) Magician wizard) {
         System.out.println("in constructor injected wizard = " + wizard);
         this.wizard = wizard;
     }
@@ -46,7 +46,7 @@ public class CargoCult {
 
     public String getSomeMagic() {
         String magicianPerformance = this.wizard.performSomeMagic();
-        return message + " --> " + anotherMessage + " -- > " + jdbcURL + magicianPerformance;
+        return message + " --> " + anotherMessage + " -- > " + jdbcURL + " magician:" + magicianPerformance;
     }
 
 }
