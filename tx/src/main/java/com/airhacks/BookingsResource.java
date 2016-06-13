@@ -22,12 +22,16 @@ public class BookingsResource {
     @PersistenceContext
     EntityManager em;
 
+    @Inject
+    AddressValidator av;
+
     @GET
     public String get() {
         String b = "1,2";
         events.fire(b);
         em.merge(new Booking(b));
         //throw new IllegalStateException("too lazy");
+        av.validateAddress();
         return b;
     }
 
