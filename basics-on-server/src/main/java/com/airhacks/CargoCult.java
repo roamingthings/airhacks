@@ -18,6 +18,9 @@ public class CargoCult {
     @Highly
     String message;
 
+    @Inject
+    String anotherMessage;
+
     /**
      * Don't use constructors in Java EE for initialization
      */
@@ -37,7 +40,7 @@ public class CargoCult {
     }
 
     public String getSomeMagic() {
-        return message;
+        return message + " --> " + anotherMessage;
     }
 
 }
