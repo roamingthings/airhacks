@@ -32,9 +32,8 @@ public class MessagesResource {
         return Response.created(uri).build();
     }
 
-    @GET
     @Path("{id}")
-    public Message findMessage(@PathParam("id") long id) {
-        return new Message("negotiated", 12);
+    public MessageResource findMessage(@PathParam("id") long id) {
+        return new MessageResource(id);
     }
 }
