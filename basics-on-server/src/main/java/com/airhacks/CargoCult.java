@@ -12,13 +12,14 @@ import javax.interceptor.Interceptors;
 public class CargoCult {
 
 //    @Inject
-    Wizard wizard;
+    Magician wizard;
 
     @Inject
     @Highly
     String message;
 
     @Inject
+    @MyConfiguration
     String anotherMessage;
 
     @Inject
@@ -33,7 +34,7 @@ public class CargoCult {
     }
 
     @Inject
-    public CargoCult(Wizard wizard) {
+    public CargoCult(Magician wizard) {
         System.out.println("in constructor injected wizard = " + wizard);
         this.wizard = wizard;
     }
@@ -44,7 +45,8 @@ public class CargoCult {
     }
 
     public String getSomeMagic() {
-        return message + " --> " + anotherMessage + " -- > " + jdbcURL;
+        String magicianPerformance = this.wizard.performSomeMagic();
+        return message + " --> " + anotherMessage + " -- > " + jdbcURL + magicianPerformance;
     }
 
 }
