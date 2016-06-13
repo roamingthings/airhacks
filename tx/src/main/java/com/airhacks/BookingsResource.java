@@ -1,7 +1,12 @@
 package com.airhacks;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -41,7 +46,7 @@ public class BookingsResource {
     UserTransaction ut;
 
     @GET
-    public String get() {
+    public String get() throws InterruptedException, ExecutionException {
         String b = "1,2";
         try {
             ut.begin();
@@ -52,9 +57,19 @@ public class BookingsResource {
         }
         events.fire(b);
         em.merge(new Booking(b));
+        List<Future<String>> results = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            results.add(this.av.validateAddress());
+        }
+        String vals = results.stream().map(f -> {
+            try {
+                return f.get();
+            } catch (InterruptedException | ExecutionException ex) {
+                return null;
+            }
+        }).collect(Collectors.joining(","));
 
-        //throw new IllegalStateException("too lazy");
-        av.validateAddress();
+        System.out.println("val = " + vals);
         try {
             ut.commit();
         } catch (RollbackException ex) {
