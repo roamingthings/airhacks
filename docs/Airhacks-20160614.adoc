@@ -252,6 +252,46 @@ We model the entity once. Every duplication is forbidden.
 ** If business logic is in the resources class you would have to mock out the REST specific artifacts like `UriInfo` or other context classes
 ** Therefore the resource will just be a very thin layer and forward the call to the service
 
+=== Artifacts
+
+==== Naming
+
+* High-Level-Concept conceptual/logical name: Package name (Contacts, Invoices, Reminders, ...)
+** `package com.company.contacts;`
+** If a component does to much it may has to be split into multiple components
+* BCE
+** Boundary package is named _boundary_
+*** `package com.company.contacts.boundary;`
+*** _API_ goes here
+*** Business logic goes here
+*** Response/Request
+*** Resources
+*** Decoders/Encoders
+*** Classname:
+**** `XXXProvider`, `XXXResource`
+**** If nothing else makes sense: `XXXService`, `XXXManager`
+** Control package is named _control_ but is optional
+*** `package com.company.contacts.control;`
+** _business_, _presentation_ package distinction is only necessary if both is present in the project
+*** `package com.company.business.contacts;`
+*** `package com.company.presentation.contacts;`
+*** Presentation beans can be named `XXXPage` or `XXXBean`
+** `package com.company.contacts.date;`
+** `XXXConverter` are put into the concept package (`com.company.date.DateTimeConverter`)
+
+Approach:
+
+* First you create the boundary
+* If the boundary class becomes to big, split into multiple _controller_ classes and use them in the (original) _boundary_ class
+* When introduce an API, add a resource class to the boundary package
+** Boundary now contains two classes
+
+==== Forbidden
+
+* Utilities
+* Mapper
+
+
 == Database Performance
 
 * RDBMS cannot scale because they have to be consistent by design
