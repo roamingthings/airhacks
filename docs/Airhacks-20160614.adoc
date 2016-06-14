@@ -355,10 +355,28 @@ Approach:
 
 [source,java,linenums]
 ----
-include::{projectdir}/contacts/src/main/com/airhacks/tight/monitoring/boundary/Monitoring.java[]
+include::{projectdir}/contacts/src/main/java/com/airhacks/tight/monitoring/boundary/Monitoring.java[]
 ----
 
 TIP: Use `java.util.concurrent.atomic.AtomicLong` etc. to count and store data in memory
+
+== Configuration, logging and error handling
+
+* In small/private APIs exception reporting via API is not necessary
+* But HTTP error codes are
+* Logging is a _use case_
+** Only write log _files_ if it's really needed
+** Logging service http://splunk.com[splunk Homepage]
+
+> Logfiles have never been helpful. Writing a good logfile is harder than writing good documentation. Dump messages don't help.
+
+== Docker
+
+* Docker makes _WildFly Swarm_ and _Payara micro_ obsolete
+* The `Dockerfile` is similar to a `pom.xml`
+* Start docker from Jenkins or shell (never from maven)
+* Docker image size is the sum of all layers. Layers are reused (de-duplication)
+* Docker is much smaller than fat-jar from Spring Boot, WildFly Swarm and Pazara micro
 
 == Resources
 
