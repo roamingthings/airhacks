@@ -122,6 +122,10 @@ TIP: Pagination cannot be done right. If a query returns to many results show th
 ** Java API http://github.com/auth0/java-jwt[GitHub: Java JWT]
 * On the server use http://keycloak.jboss.org[keycloak]
 ** Allows single sign on
+* For simple projects with one or just a few clients and one server use HTTP BASIC authentication
+** http://www.adam-bien.com/roller/abien/entry/client_side_http_basic_access[Adam Bien: CLIENT-SIDE HTTP BASIC ACCESS AUTHENTICATION WITH JAX-RS 2.0]
+*** Basically implement a `javax.ws.rs.client.ClientRequestFilter` and register it with the `javax.ws.rs.client.Client` by using `register(authenticatorFilter);`
+** Server: Use regular servlet basic authentication configured in `web.xml`
 
 === Resources with state (State machine)
 
