@@ -1,14 +1,15 @@
 package com.airhacks;
 
-import java.lang.reflect.Field;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 /**
  *
  * @author airhacks.com
  */
 public class CargoCultTest {
-
+    // tag::annotation_test[]
     @Test
     public void findAnnotation() {
         Field[] declaredFields = CargoCult.class.getDeclaredFields();
@@ -21,5 +22,6 @@ public class CargoCultTest {
             }
         }
     }
+    // end::annotation_test[]
 
 }

@@ -1,0 +1,420 @@
+= Airhacks 2016/06/13
+Alexander Sparkowsky <info@roamingthings.de>
+:doctype: book
+:source-highlighter: coderay
+:listing-caption: Listing
+:coderay-linenums-mode: inline
+:pdf-page-size: A4
+:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks
+
+== JCP / JavaEE
+
+* Download all JavaEE specs
+* When problems occur: Perform full-text search
+* Don't have to read the whole spec
+
+== Annotation in JavaEE
+
+=== Basics
+
+* Use regular Java annotation
+* In JavaEE the only retention that matters is `RetentionPolicy.RUNTIME`
+* Using `value()` allows to use annotations like `@NoMagic("the value")`
+
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/basics/src/main/java/com/airhacks/NoMagic.java[]
+----
+
+=== UnitTest for annotations
+
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/basics/src/test/java/com/airhacks/CargoCultTest.java[tag=annotation_test]
+----
+
+== Convention over configuration
+
+* Minimal projects possible
+* Today applications can be written without XML
+
+== CDI
+
+* DI is no magic
+
+.Simple DI implementation
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/basics/src/test/java/com/airhacks/WizardTest.java[]
+----
+
+* Default constructor allows dynamic instantiation
+* Don't perfom initialization in constructors
+** Injected fields not set / Object nor ready yet
+** Constructor may not be called always
+** Use `@PostConstruct`
+* `@Produces` can be applied to a variable
+
+[source,java,linenums]
+----
+public class SimpleProducer {
+    @Produces
+    private String producedString = "the value";
+}
+----
+
+* Qualifier annotations are used to distinguish multiple injected values of same type
+
+> Only use qualifiers in your project if you really need them
+
+> In usual projects you don't need `@Produces` or qualifiers
+
+* `InjectionPoint` can be used in `@Produces` methods
+** Class of injection point
+** Member name (name of field) where the field is injected
+** **Add own annotation to the member where the value is injection without the need to be a `@Qualifier`**
+*** Get the annotation from the injection point and use it
+* Interfaces can also be injected
+** In this case qualifiers will be most likely be necessary to avoid ambiguity
+
+.Sample annotation to distinguish interface implementation
+[source,java,linenums]
+----
+include::{projectdir}/basics-on-server/src/main/java/com/airhacks/Magic.java[]
+----
+_Note that the `Kind` is implemented as inner enumeration._
+
+[source,java,linenums=implicit,indent=0]
+----
+include::{projectdir}/basics-on-server/src/main/java/com/airhacks/Magic.java[tag=embeddedenum]
+----
+
+=== JAX-RS
+
+* `@ApplicationPath("myApp")` specifies the path _below_ the context path of the application
+* A JavaEE application can only become a root context via proxy (apache, NGINX)
+
+=== Aspects / Interception
+
+* if a class is annotated with `@Interceptors(MyAuditorClass.class)` all public methods will be intercepted
+* A class can only be intercepted when it is created using CDI (it will not be intercepted if created in the consturctor or elsewhere using `new`)
+
+.Intercepting Auditor
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/basics-on-server/src/main/java/com/airhacks/Audit.java[]
+----
+
+* Most JavaEE services are build using aspects
+* Not the actual bean is injected but a proxy
+
+=== Events
+
+* `@Observes` can distinguish between successful and failed transactions by using `during = TransactionPhase.AFTER_...` attribute
+** Behaves transitionally: Event will be delivered at the _end_ of the transaction
+* Rollbacks will discard "regular" CDI events
+
+[source,java,indent=0,linenums]
+----
+include::{projectdir}/tx/src/main/java/com/airhacks/BookingListener.java[tag=transaction_observer]
+----
+
+[source,java,indent=0,linenums]
+----
+include::{projectdir}/tx/src/main/java/com/airhacks/AddressValidator.java[tag=session_context_rollback]
+----
+
+=== Asynchronous response
+
+* Use `@Suspended` for asynchronous / delayed responses.
+* Will not block the server
+* The client will be blocked though but without blocking the server thread
+** HTTP is not asynchronous
+* The forgotten answer of JavaEE to Hysterix etc.git
+
+[source,java,linenums]
+----
+include::{projectdir}/jax-rs/src/main/java/com/airhacks/ContactsResource.java[]
+----
+
+== JPA
+
+* Model relations not columns or tables (`@OneToMany` etc.)
+* _Attached_ means that the entity is known by the `EntityManager`
+** As long as the entity is attached any changes made to the entity are persisted to the database when the transaction is committed (_Unit of work_). It's not necessary to call `merge()` twice during a transaction.
+
+== Bean Validation
+
+* Validation by annotation
+* There are built-in annotation
+* Build own annotation if necessary
+* It's not uncommon to work with bean validation a lot
+* Interesting built-in annotations:
+** `@Future` (date is in the future)
+** `@Past` (date is in the past)
+* Problem: Exception is thrown and transaction is rolled back
+** Validator can be injected
+
+[source,java,linnums]
+----
+@Inject
+Validator validator
+
+//...
+Set<ConstratintViolation<Index>> violations = validator.validate(targetObject);
+----
+
+== Maven
+
+> If you have to tweak your `pom.xml` to much you're probably doing something wrong.
+
+
+
+== EJB
+
+* Entrypoint to a business function (e. g. chain of injected beans) should be an EJB (handles TX etc.)
+* Best performing kind of bean
+* Introduces Monitoring
+* EJB is a very mature technology
+** It comes with aspects, transactions and pooling
+** It's faster than regular CDI beans
+*** Less injection thanks to pooling. In CDI beans injection takes place on every request.
+*** `@Asynchronous` is working
+
+=== When to use `@Stateful`
+
+* Instead of using `@SessionScoped` it is possible to use `@Stateful` beans.
+** Get transactions for free
+** Useful for multi-step UIs
+** At the end of the process call a method annotated with `@Remove` which will remove the stateful bean
+
+=== JNDI
+
+* In earlier days used instead of CDI
+* Lookup of components
+* Now done behind the scenes by CDI
+
+=== Transactions
+
+* There will only be one instance per entity (identity) per transaction
+* Transactions in the application servers are JTA transaction
+
+NOTE: JTA transaction != database transaction
+
+TIP: Usually JTA transactions are _not_ less performant than database transactions
+
+=== Data-sources
+
+* If the data-source (`<jta-data-source>jdbc/sample</jta-data-source>`) is not present in `persistence.xml` the default data-source will be injected
+* `@PersistenceContext(unit="name")` specifies the persistence unit of an `EntityManager` if multiple persistence-units are specified in _one_ or multiple `persistence.xml` files using the `name` property of `<persistence-unit name="prod" transaction-type="JTA">`
+
+=== Exception handling
+
+* Checked `Exceptions` will _not_ rollback a transaction
+* Unchecked `Exceptions` _will_ rollback a transaction
+
+=== Transaction management configuration
+
+* Usually container managed transactions will be used
+** Bean managaged transactions allow to specify a transaction timeout per method
+
+[source,java,linenums]
+----
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+public class MyBean {
+    @Resource
+    UserTransaction ut;
+
+    public void doSomething() {
+        ut.begin();
+        //...
+        ut.commit();
+    }
+}
+----
+
+* Default for all EJB methods (`@Stateless`): `@TransactionAttribute(TransactionAttributeType.REQUIRED)`
+** It's not necessary to specify transaction attribute for methods
+** Other interesting variants (rarely needed)
+*** `NOT_SUPPORTED` will suspend a running transaction
+*** `MANDATORY` requires an already running transaction
+
+=== Bind Bean to a transaction
+
+* `@TransactionScoped` Beans disappear after the transaction finished (independent of the outcome)
+
+.Alternative way to store a bean for the duration of a transaction
+[source,java,linenums]
+----
+@Resource
+TransactionSynchronizationRegistry tsr;
+
+//...
+// Store objects during the lifetime of a transaction
+tsr.putResource(key, value)
+----
+
+== Integrate custom modules/libraries
+
+* Integrate a custom module without the need to rebuild an enterprise application
+** Use webhooks
+*** Communication by REST
+*** Use callback URLs
+*** Something like a remote module
+
+
+== Asynchronous
+
+* User `Future` to return values that will be computed later
+** A future is just a container to perform an action
+** `get()` will block/return the value computed by the future
+* It's possible to create/collect multiple `Future` values in a coll
+
+.Usage of a `Future`
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/tx/src/main/java/com/airhacks/BookingsResource.java[tag=future]
+----
+
+* Annotation `@Schedule` on a method can be used to invoke a method in regular intervals. Similar to cron semantic.
+* `@Startup @Singleton @DependsOn` can be used to specify the order in which singletons are created
+
+=== Concurrency management
+
+* Using `@ConcurrencyManagement(ConcurrencyManagementType.BEAN)` on a bean will disable all locks on the bean
+
+
+== JSP
+
+> They are coming back
+
+> Best template langauge. Better than _FreeMarker_ and _Velocity_
+
+* Fasted and best possible template language when using multipage applications
+** SPA communicate via REST
+* `@Model` stereotype for `@Named` and `@RequestScoped`
+* Can be used to generate reports
+** Former Airhacks attendee http://www.stylight.com[Stylight] is using JSP instead of JavaScript clients
+*** Customized version of struts and JSP
+*** Better Google scoring
+
+== JSF
+
+> Enterprises write JavaScript clients and cures about JSF because the try to tweak components libraries like Primefaces. This produces a lot of problems.
+> Startups use the component libraries without any change and are happy with them
+
+NOTE: If you are using a component library use the components as they are without wanting to change them
+
+=== Resources
+
+http://blog.websitesframeworks.com
+
+* MVC framework: http://vraptor.org (combines CDI + JSP) archetype for JavaMVC
+** Also useful for invoice generation or legal stuff
+
+== Persistence
+
+=== Initialize a database for development
+
+* Generate the schema programmatically by using `javax.persistence.Persistence#generateSchema(String persistenceUnitName, Map map)`
+
+* In project stage:
+** https://flywaydb.org (simpler, jenkins)
+** http://liquibase.org
+* In production:
+** `@Startup @Singleton` together with entities
+
+
+.Generate DDL by eclipselink/hibernate -> Transform to flywaydb.org
+[source,xml,linenums]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.1" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="EFS2015-persistence-unit" transaction-type="JTA">
+    <description>Forge Persistence Unit</description>
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+      <property name="javax.persistence.schema-generation.scripts.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.scripts.create-target" value="./create.sql"/>
+      <property name="javax.persistence.schema-generation.scripts.drop-target" value="./drop.sql"/>
+    </properties>
+  </persistence-unit>
+</persistence>
+----
+http://www.thoughts-on-java.org/standardized-schema-generation-data-loading-jpa-2-1[]
+
+
+== EL
+
+* Expression language can be used in any project inside Java code not only in JSF/JSP
+
+[source,java,linenums]
+----
+include::{projectdir}/el/src/test/java/com/airhacks/el/ELTest.java[]
+----
+
+== JAX-RS
+
+* Return `JsonObject` or `Response`
+* Take a brief look at the HTTP specification (for POST)
+** Return 200 or 204 (ok) or 201 (Created) with location by using `Response.created(location).build()`
+
+.Create and return the location of an object created by POST
+[source,java,linenums]
+----
+include::{projectdir}/jax-rs/src/main/java/com/airhacks/MessagesResource.java[tag=post]
+----
+
+.Return an object referenced by the location header
+[source,java,linenums]
+----
+include::{projectdir}/jax-rs/src/main/java/com/airhacks/MessagesResource.java[tag=location_get]
+----
+
+=== JAXB vs. JsonObject
+
+* Preferred JsonObject over JAXB because `JsonObject` gives more flexibility and most APIs are JSON anyway.
+* Also you have to map them manually it's worth the effort
+
+> I use it more and more. Even in my OSS projects.
+
+
+=== HATEAOS
+
+> Good to know but never be to extreme because you loose a lot of time in the last 10%
+
+=== Exception handling
+
+* Use a `ExceptionMapper<ExceptionType>` to map an exception to a `Response`.
+** Don't forget the `@Provider` annotation
+* Old API often forgotten
+
+[source,java,linenums]
+----
+include::{projectdir}/jax-rs/src/main/java/com/airhacks/RuntimeExceptionMapper.java[]
+----
+
+=== Use sub resources
+
+* Has to be initialized by the main resources
+* Use `@Path` in the main resource
+* All other annotations (`@GET`, `@POST` etc.) in the sub-(sub-)resources
+* No CDI injection
+
+> Multiple layers are ok but painful. I recently implemented three levels of sub-resources
+
+TIP: Lookup JAX-RS spec for more information and samples
+
+== Resources
+
+
+
+== Questions
+
+Example: /cache/{code}/properties/{key} and /properties/{key}
+

@@ -1,13 +1,13 @@
 package com.airhacks;
 
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 @Stateless
 public class AddressValidator {
 
+    // tag::session_context_rollback[]
     @Resource
     SessionContext sc;
 
@@ -29,5 +30,6 @@ public class AddressValidator {
         }
         return new AsyncResult<>("42-" + System.currentTimeMillis());
     }
+    // end::session_context_rollback[]
 
 }

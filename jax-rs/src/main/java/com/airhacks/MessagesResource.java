@@ -1,6 +1,5 @@
 package com.airhacks;
 
-import java.net.URI;
 import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 /**
  *
@@ -23,6 +23,7 @@ public class MessagesResource {
         throw new IllegalStateException("too lazy");
     }
 
+    // tag::post[]
     @POST
     public Response save(JsonObject object, @Context UriInfo info) {
         System.out.println("--- " + object);
@@ -31,9 +32,12 @@ public class MessagesResource {
                 build();
         return Response.created(uri).build();
     }
+    // end::post[]
 
+    // tag::location_get[]
     @Path("{id}")
     public MessageResource findMessage(@PathParam("id") long id) {
         return new MessageResource(id);
     }
+    // end::location_get[]
 }

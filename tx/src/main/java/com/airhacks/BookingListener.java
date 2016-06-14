@@ -8,7 +8,7 @@ import javax.enterprise.event.TransactionPhase;
  * @author airhacks.com
  */
 public class BookingListener {
-
+    // tag::transaction_observer[]
     public void onSuccessfulBooking(@Observes(during = TransactionPhase.AFTER_SUCCESS) String booking) {
         System.out.println("++event- " + booking);
     }
@@ -16,5 +16,5 @@ public class BookingListener {
     public void onFailedBooking(@Observes(during = TransactionPhase.AFTER_FAILURE) String booking) {
         System.out.println("--event- " + booking);
     }
-
+    // end::transaction_observer[]
 }

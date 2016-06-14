@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/basics" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/el" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jaxrs-client" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

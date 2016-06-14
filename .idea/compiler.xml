@@ -25,6 +25,8 @@
         <module name="basics" />
         <module name="basics-on-server" />
         <module name="el" />
+        <module name="jax-rs" />
+        <module name="jaxrs-client" />
         <module name="jsf" />
         <module name="tx" />
         <module name="ui" />
@@ -34,6 +36,8 @@
       <module name="basics" target="1.8" />
       <module name="basics-on-server" target="1.8" />
       <module name="el" target="1.7" />
+      <module name="jax-rs" target="1.8" />
+      <module name="jaxrs-client" target="1.8" />
       <module name="jsf" target="1.8" />
       <module name="tx" target="1.8" />
       <module name="ui" target="1.8" />

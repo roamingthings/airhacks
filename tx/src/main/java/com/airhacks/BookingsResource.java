@@ -1,12 +1,5 @@
 package com.airhacks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -15,15 +8,17 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.transaction.*;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -66,6 +61,7 @@ public class BookingsResource {
         }
         events.fire(b);
         em.merge(new Booking(b));
+        // tag::future[]
         List<Future<String>> results = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             results.add(this.av.validateAddress());
@@ -77,8 +73,8 @@ public class BookingsResource {
                 return null;
             }
         }).collect(Collectors.joining(","));
-
         System.out.println("val = " + vals);
+        // end::future[]
         try {
             ut.commit();
         } catch (RollbackException ex) {
