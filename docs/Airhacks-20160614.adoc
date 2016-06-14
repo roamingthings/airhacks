@@ -126,6 +126,29 @@ TIP: Pagination cannot be done right. If a query returns to many results show th
 ** http://www.adam-bien.com/roller/abien/entry/client_side_http_basic_access[Adam Bien: CLIENT-SIDE HTTP BASIC ACCESS AUTHENTICATION WITH JAX-RS 2.0]
 *** Basically implement a `javax.ws.rs.client.ClientRequestFilter` and register it with the `javax.ws.rs.client.Client` by using `register(authenticatorFilter);`
 ** Server: Use regular servlet basic authentication configured in `web.xml`
+* `javax.security.Principal` is a built-in bean to represent the currently authenticated user (defined in the CDI-Spec)
+
+* Base authentication is performed by the container mechanism but only the simplest mechanism has to be used.
+** No application specific data is stored in the authentication data-source
+* Extended "principal entity" is produced by a separate producer boundary
+** Fetches data from database or any other resource
+* A custom interceptor can be implemented and used to check additional entitlements
+** Allows for a very flexible security mechanism
+
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/contacts/src/main/java/com/airhacks/tight/security/boundary/Authenticator.java[tag=airhacks_principal_producer]
+----
+
+[source,java,linenums]
+----
+include::{projectdir}/contacts/src/main/java/com/airhacks/tight/security/entity/AirhacksPrincipal.java[]
+----
+
+[source,java,linenums]
+----
+include::{projectdir}/contacts/src/main/java/com/airhacks/tight/security/boundary/EntitlementEnforcement.java[]
+----
 
 === Resources with state (State machine)
 
@@ -262,13 +285,14 @@ We model the entity once. Every duplication is forbidden.
 * BCE
 ** Boundary package is named _boundary_
 *** `package com.company.contacts.boundary;`
-*** _API_ goes here
+*** _API of the component_ (Internal, REST etc.)
 *** Business logic goes here
 *** Response/Request
 *** Resources
 *** Decoders/Encoders
+*** Annotations
 *** Classname:
-**** `XXXProvider`, `XXXResource`
+**** `XXXProvider`, `XXXResource`, `XXXEnforcement`
 **** If nothing else makes sense: `XXXService`, `XXXManager`
 ** Control package is named _control_ but is optional
 *** `package com.company.contacts.control;`
@@ -296,6 +320,10 @@ Approach:
 
 * RDBMS cannot scale because they have to be consistent by design
 * NoSQL databases can scale because you can select the grade of consistency
+
+== Misc
+
+NOTE: Apache commons is broken. It's possible to hack a serialized object and gain root acces to the application server. Apache commons is used by most application servers.
 
 == Resources
 
