@@ -10,6 +10,7 @@ import java.security.Principal;
  * @author airhacks.com
  */
 public class Authenticator {
+
     // tag::airhacks_principal_producer[]
     @Produces
     public AirhacksPrincipal expose(Principal principal) {
