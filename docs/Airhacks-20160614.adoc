@@ -127,7 +127,7 @@ TIP: Pagination cannot be done right. If a query returns to many results show th
 *** Basically implement a `javax.ws.rs.client.ClientRequestFilter` and register it with the `javax.ws.rs.client.Client` by using `register(authenticatorFilter);`
 ** Server: Use regular servlet basic authentication configured in `web.xml`
 * `javax.security.Principal` is a built-in bean to represent the currently authenticated user (defined in the CDI-Spec)
-* For the container part of security look at the upcoming https://github.com/javaee-security-spec/soteria[Java EE Security JSR] specification
+* For the container part of security look at the upcoming https://github.com/javaee-security-spec/soteria[Java EE Security API JSR 375] specification
 ** An older framework to look at is http://shiro.apache.org[Shiro]
 
 * Base authentication is performed by the container mechanism but only the simplest mechanism has to be used.
