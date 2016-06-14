@@ -67,6 +67,8 @@ Alexander Sparkowsky <info@roamingthings.de>
 * Actions in a REST API must not block but should return quickly
 ** Long running operations trigger the operation asynchronously and store the job (information) in the database (returning 204 - No Data)
 ** Either poll or use Websockets
+* If a REST API evolves it should still work with older client implementations
+** System tests help to achieve this
 
 > A good REST API is to machines like a good website to humans
 
@@ -197,7 +199,7 @@ include::{projectdir}/contacts/src/main/java/com/airhacks/tight/contact/boundary
 
 [source,java,linenums,indent=0]
 ----
-include::{projectdir}/contacts-st/src/main/java/com/airhacks/tight/contact/boundary/ContactsResourceIT.java[tag=crud_test]
+include::{projectdir}/contacts-st/src/test/java/com/airhacks/tight/contact/boundary/ContactsResourceIT.java[tag=crud_test]
 ----
 
 `$ mvn failsafe:integration-test` allows testing of the whole API
