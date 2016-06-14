@@ -5,7 +5,7 @@ Alexander Sparkowsky <info@roamingthings.de>
 :listing-caption: Listing
 :coderay-linenums-mode: inline
 :pdf-page-size: A4
-:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks
+:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks-roamingthings
 
 == JCP / JavaEE
 
@@ -142,6 +142,7 @@ include::{projectdir}/jax-rs/src/main/java/com/airhacks/ContactsResource.java[]
 * Model relations not columns or tables (`@OneToMany` etc.)
 * _Attached_ means that the entity is known by the `EntityManager`
 ** As long as the entity is attached any changes made to the entity are persisted to the database when the transaction is committed (_Unit of work_). It's not necessary to call `merge()` twice during a transaction.
+* to save or update an entity the following call is sufficient: `em.merge(theEntity)`
 
 == Bean Validation
 

@@ -5,7 +5,7 @@ Alexander Sparkowsky <info@roamingthings.de>
 :listing-caption: Listing
 :coderay-linenums-mode: inline
 :pdf-page-size: A4
-:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks
+:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks-roamingthings
 :imagesdir: images
 
 == Maven
@@ -134,6 +134,114 @@ TIP: Requesting (`GET`) the `state` attribute of a resource return the current s
 }
 ----
 
+=== HATEOS
+
+* Stay pragmatic
+** Making a REST API conform to HATEOS may cost to much time
+* HATEOS sometimes goes to far
+* ATOM may be more valuable then HATEOS (for links)
+
+=== Documentation of API
+
+==== Tool: Swagger for API documentation
+
+* A "good" code generator: JAX-RS Analyzer/Swagger
+** https://github.com/sdaschner/jaxrs-analyzer[JAX-RS Analyzer from Sebastian Daschner]
+** https://github.com/sdaschner/jaxrs-analyzer-maven-plugin[Maven JAX-RS Analyzer Maven Plugin]
+** Creates asciidoc documentation which can be converted to html or PDF
+** Creates swagger to be used with automation tools
+
+[source,xml]
+----
+<plugin>
+    <groupId>com.sebastian-daschner</groupId>
+    <artifactId>jaxrs-analyzer-maven-plugin</artifactId>
+    <version>0.9</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>analyze-jaxrs</goal>
+            </goals>
+            <configuration>
+                <!-- Available backends are plaintext (default), swagger and asciidoc -->
+                <backend>plaintext</backend>
+                <!-- Domain of the deployed project, defaults to example.com -->
+                <deployedDomain>example.com</deployedDomain>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+----
+
+==== Provide sample data
+
+Use HTTP `OPTIONS` to deliver a sample object of the resource.
+
+.ContactsResource.java
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/contacts/src/main/java/com/airhacks/tight/contact/boundary/ContactsResource.java[tag=options_sample]
+----
+
+`OPTIONS /contacts` -> Delivers a sample
+`$ curl -XOPTIONS -H'Accept: application/json' http://localhost:8080/contacts/resources/contacts`
+
+`GET /contacts/42` -> Deliver a concrete sample
+
+=== Testing of RESTful API
+
+* Write an system test to perform basic CRUD
+** Tests the webservice
+** Shows usage of API
+** Allows testing/automation in Jenkins (last step of pipeline)
+
+[source,java,linenums,indent=0]
+----
+include::{projectdir}/contacts-st/src/main/java/com/airhacks/tight/contact/boundary/ContactsResourceIT.java[tag=crud_test]
+----
+
+`$ mvn failsafe:integration-test` allows testing of the whole API
+
+[ditaa]
+....
+
+/------------\   /--------------\   /-------------------------------------\   /------------------\
+| Unit Tests |-->| Generate WAR |-->| Application Server Setup via Docker |-->| Run System Tests |
+\------------/   \--------------/   \-------------------------------------/   \------------------/
+....
+
+Should run fast enough
+
+> In my opinion system tests are mandatory while unit tests are not.
+
+== DRY and DIE
+
+DRY:: Don't repeat yourself
+DIE:: Doublication is evil
+
+* Don't duplicate data
+* The truth lies in the Database
+
+Forbidden (J2EE) patterns:
+
+* DTO (means copy the Entity 1:1 just for transfer)
+** Having an object that differs in structure or composes multiple entities is fine http://www.adam-bien.com/roller/abien/entry/in_case_dozer_or_beanutils[Adam Bien: IN CASE DOZER OR BEANUTILS ARE WORKING WELL YOU HAVE A PROBLEM]
+* DAO
+
+We model the entity once. Every duplication is forbidden.
+
+* Don't be a Cargo Cult Programmer
+** Question everything
+** Be pragmatic _Why do I need this? What **real** problem does this solve._
+* Code generators are suspicion
+* Delete everything that's not really needed
+
+== BCE
+
+* The business logic should never know that a REST resource exist
+** If business logic is in the resources class you would have to mock out the REST specific artifacts like `UriInfo` or other context classes
+** Therefore the resource will just be a very thin layer and forward the call to the service
+
 == Resources
 
 Local maven repository:: https://archiva.apache.org/index.cgi[Apache archiva]
@@ -141,3 +249,39 @@ GitHub Developer API Documentation:: https://developer.github.com/v3/[GitHub Dev
 keycloak:: http://keycloak.jboss.org[keycloak]
 JWT:: http://jwt.io[JWT]
 Java JWT:: http://github.com/auth0/java-jwt[GitHub: Java JWT]
+Cargo Cult Programming:: https://en.wikipedia.org/wiki/Cargo_cult_programming[Wikipedia: Cargo Cult Programming]
+
+http://www.adam-bien.com/roller/abien/entry/the_ingredients_of_java_ee
+
+https://jcp.org
+
+https://github.com/samolisov/spring-vs-ejb-vs-cdi-benchmark
+
+https://flywaydb.org
+
+http://www.liquibase.org
+
+https://developer.github.com/v3/pulls/comments/
+
+https://kenai.com/projects/suncloudapis/pages/HelloCloud
+
+https://jwt.io
+
+http://keycloak.jboss.org
+
+https://forgerock.org/openam/
+
+https://github.com/auth0/java-jwt
+
+http://www.adam-bien.com/roller/abien/entry/java_ee_authentication_and_authorization
+
+http://www.adam-bien.com/roller/abien/entry/a_single_line_of_code
+
+https://en.wikipedia.org/wiki/HATEOAS
+
+https://tools.ietf.org/html/rfc5023
+
+`curl -i -XPOST -d'{"address":"sample street"}' -H"Content-type: application/json" http://localhost:8080/contacts/resources/contacts`
+
+Perform IT: `mvn failsafe:integration-test`
+

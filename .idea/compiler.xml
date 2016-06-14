@@ -24,6 +24,8 @@
         <processorPath useClasspath="true" />
         <module name="basics" />
         <module name="basics-on-server" />
+        <module name="contacts" />
+        <module name="contacts-st" />
         <module name="el" />
         <module name="jax-rs" />
         <module name="jaxrs-client" />
@@ -35,6 +37,8 @@
     <bytecodeTargetLevel>
       <module name="basics" target="1.8" />
       <module name="basics-on-server" target="1.8" />
+      <module name="contacts" target="1.8" />
+      <module name="contacts-st" target="1.8" />
       <module name="el" target="1.7" />
       <module name="jax-rs" target="1.8" />
       <module name="jaxrs-client" target="1.8" />

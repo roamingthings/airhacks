@@ -5,6 +5,7 @@
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/basics-on-server" />
+    <file type="web" url="file://$PROJECT_DIR$/contacts" />
     <file type="web" url="file://$PROJECT_DIR$/jax-rs" />
     <file type="web" url="file://$PROJECT_DIR$/jsf" />
     <file type="web" url="file://$PROJECT_DIR$/tx" />
@@ -21,6 +22,8 @@
         <option value="$PROJECT_DIR$/ui/pom.xml" />
         <option value="$PROJECT_DIR$/jax-rs/pom.xml" />
         <option value="$PROJECT_DIR$/jaxrs-client/pom.xml" />
+        <option value="$PROJECT_DIR$/contacts/pom.xml" />
+        <option value="$PROJECT_DIR$/contacts-st/pom.xml" />
       </list>
     </option>
   </component>

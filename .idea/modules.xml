@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/airhacks.iml" filepath="$PROJECT_DIR$/.idea/airhacks.iml" />
       <module fileurl="file://$PROJECT_DIR$/basics/basics.iml" filepath="$PROJECT_DIR$/basics/basics.iml" />
       <module fileurl="file://$PROJECT_DIR$/basics-on-server/basics-on-server.iml" filepath="$PROJECT_DIR$/basics-on-server/basics-on-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/contacts/contacts.iml" filepath="$PROJECT_DIR$/contacts/contacts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/contacts-st/contacts-st.iml" filepath="$PROJECT_DIR$/contacts-st/contacts-st.iml" />
       <module fileurl="file://$PROJECT_DIR$/el/el.iml" filepath="$PROJECT_DIR$/el/el.iml" />
       <module fileurl="file://$PROJECT_DIR$/jax-rs/jax-rs.iml" filepath="$PROJECT_DIR$/jax-rs/jax-rs.iml" />
       <module fileurl="file://$PROJECT_DIR$/jaxrs-client/jaxrs-client.iml" filepath="$PROJECT_DIR$/jaxrs-client/jaxrs-client.iml" />
