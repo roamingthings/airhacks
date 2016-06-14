@@ -301,12 +301,14 @@ include::{projectdir}/tx/src/main/java/com/airhacks/BookingsResource.java[tag=fu
 *** Customized version of struts and JSP
 *** Better Google scoring
 
-== JSF
+== JSF vs. HTML
 
 > Enterprises write JavaScript clients and cures about JSF because the try to tweak components libraries like Primefaces. This produces a lot of problems.
 > Startups use the component libraries without any change and are happy with them
 
 NOTE: If you are using a component library use the components as they are without wanting to change them
+
+> For boring database backends I tend to use JSF while for fancy, modern cracy applications I go with HTML5 and React
 
 === Resources
 
