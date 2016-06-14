@@ -143,6 +143,7 @@ include::{projectdir}/jax-rs/src/main/java/com/airhacks/ContactsResource.java[]
 * _Attached_ means that the entity is known by the `EntityManager`
 ** As long as the entity is attached any changes made to the entity are persisted to the database when the transaction is committed (_Unit of work_). It's not necessary to call `merge()` twice during a transaction.
 * to save or update an entity the following call is sufficient: `em.merge(theEntity)`
+* http://datanucleus.org[DataNucleus] connects JPA to all kinds of database
 
 == Bean Validation
 

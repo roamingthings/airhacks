@@ -223,7 +223,7 @@ Should run fast enough
 == DRY and DIE
 
 DRY:: Don't repeat yourself
-DIE:: Doublication is evil
+DIE:: Duplication is evil
 
 * Don't duplicate data
 * The truth lies in the Database
@@ -242,11 +242,20 @@ We model the entity once. Every duplication is forbidden.
 * Code generators are suspicion
 * Delete everything that's not really needed
 
+> I wait until I have a problem and then solve it instead of trying to solve all possible problems in advance.
+
+* When working on the "cutting edge" version of a software chances are that bugs get fixed fast (and cheap) since the whole developer team is working on the trunk anyway.
+
 == BCE
 
 * The business logic should never know that a REST resource exist
 ** If business logic is in the resources class you would have to mock out the REST specific artifacts like `UriInfo` or other context classes
 ** Therefore the resource will just be a very thin layer and forward the call to the service
+
+== Database Performance
+
+* RDBMS cannot scale because they have to be consistent by design
+* NoSQL databases can scale because you can select the grade of consistency
 
 == Resources
 
@@ -256,6 +265,8 @@ keycloak:: http://keycloak.jboss.org[keycloak]
 JWT:: http://jwt.io[JWT]
 Java JWT:: http://github.com/auth0/java-jwt[GitHub: Java JWT]
 Cargo Cult Programming:: https://en.wikipedia.org/wiki/Cargo_cult_programming[Wikipedia: Cargo Cult Programming]
+
+=== Shownotes
 
 http://www.adam-bien.com/roller/abien/entry/the_ingredients_of_java_ee
 
