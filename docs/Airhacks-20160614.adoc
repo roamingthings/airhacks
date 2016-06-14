@@ -1,0 +1,143 @@
+= Airhacks 2016/06/14
+Alexander Sparkowsky <info@roamingthings.de>
+:doctype: book
+:source-highlighter: coderay
+:listing-caption: Listing
+:coderay-linenums-mode: inline
+:pdf-page-size: A4
+:projectdir: /Users/alxs/Development/Training/Java/Airhacks/airhacks
+:imagesdir: images
+
+== Maven
+
+> Use maven on the server
+> Gradle would be good for HTML5 projects but I use the tools of the JavaScript developer team (e.g. Gulp)
+
+== Git
+
+* No global counter
+* Hash and reference to committed files
+** Commit itself is treated like a file
+* Technically everything is a branch
+* Branch points to a commit
+
+
+=== Rebase
+
+* Master-Branch and Fix-Branch
+* Commits in Master-Branch and Fix-Branch
+* Rebase when in Fix-Branch moves the Fix-Branch forward in the rebased branch (e.g. master)
+
+`$ git rebase master`
+
+[ditaa, "Before rebase"]
+....
+      +------*----*
+      |
+*-----*----*---*---*
+....
+
+[ditaa, "After rebase"]
+....
+       ------=---> *------*----*
+                   |
+*-----*----*---*---*--
+....
+
+
+== Jenkins
+
+* Automate anything
+* Reproducible
+
+
+== RESTful architecture
+
+* Publish the content in the best possible way
+* Model resources
+** Resources will be named in plural form
+** Model collections
+** Bookmarkable URIs
+* Good designed REST API to look at http://https://developer.github.com/v3/[GitHub Developer API Documentation]
+* PUT vs POST
+** PUT requires the key and is idempotent
+** POST requires no key and a new resource will be created each time
+* State is possible
+** In Java use `@Stateful` or use Java `CookieHandler` http://www.adam-bien.com/roller/abien/entry/a_single_line_of_code
+* Actions in a REST API must not block but should return quickly
+** Long running operations trigger the operation asynchronously and store the job (information) in the database (returning 204 - No Data)
+** Either poll or use Websockets
+
+> A good REST API is to machines like a good website to humans
+
+Example:
+
+Use case: _Generate a document and send it to a contact -> It is a campaign_
+
+.Given resource for a contact
+----
+/contacts/42/addresses/invoice
+----
+
+.Generate the document and prepare the campaign to be sent out
+----
+POST /campaigns
+{
+    contacts: 42,
+    type: pdf
+}
+----
+
+.Response
+----
+201 -> created
+Location: /campaigns/13
+----
+
+.Send out the generated campaign object. Will update the status of the campaign entity
+----
+PUT /campaigns/13/workflow
+{
+    action: send
+}
+----
+
+TIP: Listen to the users and search for titles
+
+=== Query parameters
+
+* Query parameters should be fully optional
+** The operation should work without any query parameter
+** The query parameter optimizes the result (for the client)
+* Examples
+** Pagination `from`, `to`, `limit`, ...
+
+TIP: Pagination cannot be done right. If a query returns to many results show the first results and ask the user to refine the query. Almost nobody will call the next page.
+
+=== Security
+
+* Use of http://jwt.io[JWT] increases. Seems to become a defacto-standard
+** Java API http://github.com/auth0/java-jwt[GitHub: Java JWT]
+* On the server use http://keycloak.jboss.org[keycloak]
+** Allows single sign on
+
+=== Resources with state (State machine)
+
+TIP: Requesting (`GET`) the `state` attribute of a resource return the current state and the next possible states:
+
+`GET /my_resource/42/states`
+[source,json]
+----
+{
+    "state": "waiting",
+     "next_transitions": ["print", "remove"]
+}
+----
+
+== Resources
+
+Local maven repository:: https://archiva.apache.org/index.cgi[Apache archiva]
+GitHub Developer API Documentation:: https://developer.github.com/v3/[GitHub Developer API Documentation]
+keycloak:: http://keycloak.jboss.org[keycloak]
+JWT:: http://jwt.io[JWT]
+Java JWT:: http://github.com/auth0/java-jwt[GitHub: Java JWT]
