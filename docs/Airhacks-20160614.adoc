@@ -152,7 +152,7 @@ include::{projectdir}/contacts/src/main/java/com/airhacks/tight/security/entity/
 include::{projectdir}/contacts/src/main/java/com/airhacks/tight/security/boundary/EntitlementEnforcement.java[]
 ----
 
-NOTE: Apache commons is broken. It's possible to hack a serialized object and gain root access to the application server. Apache commons is used by most application servers. This is important to know if (want) to use RMI.
+NOTE: Apache commons is broken. It's possible to hack a serialized object and gain root access to the application server. Apache commons is used by most application servers. This is important to know if (want) to use RMI. (see https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/[])
 
 === Resources with state (State machine)
 
@@ -424,3 +424,5 @@ https://tools.ietf.org/html/rfc5023
 Perform IT: `mvn failsafe:integration-test`
 
 https://en.wikipedia.org/wiki/Parkinson%27s_law_of_triviality
+
+https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/
