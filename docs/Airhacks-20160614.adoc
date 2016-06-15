@@ -1,5 +1,7 @@
-= Airhacks 2016/06/14
+= Airhacks Workshop Effective Java EE
 Alexander Sparkowsky <info@roamingthings.de>
+2016-06-14
+:toc: left
 :doctype: book
 :source-highlighter: coderay
 :listing-caption: Listing
@@ -279,9 +281,7 @@ We model the entity once. Every duplication is forbidden.
 ** If business logic is in the resources class you would have to mock out the REST specific artifacts like `UriInfo` or other context classes
 ** Therefore the resource will just be a very thin layer and forward the call to the service
 
-=== Artifacts
-
-==== Naming
+=== Artifact Naming
 
 * High-Level-Concept conceptual/logical name: Package name (Contacts, Invoices, Reminders, ...)
 ** `package com.company.contacts;`
@@ -317,10 +317,11 @@ Approach:
 * When introduce an API, add a resource class to the boundary package
 ** Boundary now contains two classes
 
-==== Forbidden
+=== Forbidden Artifacts
 
 * Utilities
 * Mapper
+* Common
 
 
 == Database Performance
@@ -380,6 +381,7 @@ TIP: Use `java.util.concurrent.atomic.AtomicLong` etc. to count and store data i
 
 == Resources
 
+Effective Java EE Workshop-Videos:: http://effectivejavaee.com[Effective Java EE on Vimeo]
 Local maven repository:: https://archiva.apache.org/index.cgi[Apache archiva]
 GitHub Developer API Documentation:: https://developer.github.com/v3/[GitHub Developer API Documentation]
 keycloak:: http://keycloak.jboss.org[keycloak]

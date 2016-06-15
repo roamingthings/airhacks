@@ -1,5 +1,6 @@
-= Airhacks 2016/06/13
+= Airhacks Workshop Java EE Bootstrap
 Alexander Sparkowsky <info@roamingthings.de>
+2016-06-13
 :doctype: book
 :source-highlighter: coderay
 :listing-caption: Listing
@@ -416,9 +417,5 @@ TIP: Lookup JAX-RS spec for more information and samples
 
 == Resources
 
-
-
-== Questions
-
-Example: /cache/{code}/properties/{key} and /properties/{key}
+Java EE Bootstrap Workshop-Videos:: http://javaeebootstrap.com[Java EE Bootstrap on Vimeo]
 
