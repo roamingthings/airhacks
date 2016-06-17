@@ -10,7 +10,7 @@ Alexander Sparkowsky <info@roamingthings.de>
 
 == JCP / JavaEE
 
-* Download all JavaEE specs
+* Download all Java EE specs
 * When problems occur: Perform full-text search
 * Don't have to read the whole spec
 
